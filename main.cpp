@@ -40,13 +40,8 @@ int main() {
     output(head);
 
     // insert a node
-    Node* current = head;
     cout << "After which node to insert 10000? " << endl;
-    count = 1;
-    while (current) {
-        cout << "[" << count++ << "] " << current->value << endl;
-        current = current->next;
-    }
+    output(head); // Just realized I can just reuse the output func here. Whoops!
     cout << "Choice --> ";
     cin >> entry;
 
