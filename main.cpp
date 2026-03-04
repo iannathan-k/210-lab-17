@@ -1,6 +1,8 @@
 #include <iostream>
 using namespace std;
 
+// COMSC-210 | Lab 17 | Ian Kusmiantoro
+
 const int SIZE = 7;  
 
 struct Node {
@@ -14,6 +16,7 @@ void insertNode(Node*&, int);
 void deleteList(Node*&);
 void insertAtHead(Node*&, int);
 void insertAtTail(Node*&, int);
+void getCurrentAndPrev(Node*, Node*&, Node*&, int);
 
 int main() {
     Node *head = nullptr;
@@ -76,32 +79,25 @@ void deleteNode(Node*& head, int entry) {
     Node* prev = head;
 
     // traverse that many times and delete that node
-    for (int i = 0; i < (entry-1); i++)
-        if (i == 0)
-            current = current->next;
-        else {
-            current = current->next;
-            prev = prev->next;
-        }
+    getCurrentAndPrev(head, current, prev, entry - 1);
     // at this point, delete current and reroute pointers
     if (current) {  // checks for current to be valid before deleting the node
         prev->next = current->next;
         delete current;
         current = nullptr;
     }
+
+    // Assuming that we don't concern ourselves with deleting the head node,
+    // As the current code leads to a memory leak, but the original code didn't include
+    // Handling, so I'm carrying that over.
 }
 
 void insertNode(Node*& head, int entry) {
     Node* current = head;
     Node* prev = head;
 
-    for (int i = 0; i < (entry); i++)
-        if (i == 0)
-            current = current->next;
-        else {
-            current = current->next;
-            prev = prev->next;
-        }
+    getCurrentAndPrev(head, current, prev, entry);
+
     //at this point, insert a node between prev and current
     Node * newnode = new Node;
     newnode->value = 10000;
@@ -154,5 +150,22 @@ void insertAtTail(Node*& head, int val) {
         new_node->next = nullptr;
         new_node->value = val;
     }
+}
 
+void getCurrentAndPrev(Node* head, Node*& current, Node*& prev, int entry) {
+    // Current and prev are passed by reference so we can change them
+    current = head;
+    prev = head;
+
+    for (int i = 0; i < entry; i++)
+        if (i == 0)
+            current = current->next;
+        else {
+            current = current->next;
+            prev = prev->next;
+        }
+
+    // Assuming that the entry is always valid, because the original code
+    // Didn't include validation checking for whether entry is within range
+    // So I'm also carrying that over.
 }
