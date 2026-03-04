@@ -9,6 +9,11 @@ struct Node {
 };
 
 void output(Node *);
+void deleteNode(Node*&, int);
+void insertNode(Node*&, int);
+void deleteList(Node*&);
+void insertAtHead(Node*&, int);
+void insertAtTail(Node*&, int);
 
 int main() {
     Node *head = nullptr;
@@ -17,19 +22,7 @@ int main() {
     // create a linked list of size SIZE with random numbers 0-99
     for (int i = 0; i < SIZE; i++) {
         int tmp_val = rand() % 100;
-        Node *newVal = new Node;
-        
-        // adds node at head
-        if (!head) { // if this is the first node, it's the new head
-            head = newVal;
-            newVal->next = nullptr;
-            newVal->value = tmp_val;
-        }
-        else { // its a second or subsequent node; place at the head
-            newVal->next = head;
-            newVal->value = tmp_val;
-            head = newVal;
-        }
+        insertAtHead(head, tmp_val);
     }
     output(head);
 
@@ -78,12 +71,11 @@ void output(Node * hd) {
     cout << endl;
 }
 
-void deleteNode(Node* head, int entry) {
+void deleteNode(Node*& head, int entry) {
     Node* current = head;
+    Node* prev = head;
 
     // traverse that many times and delete that node
-    current = head;
-    Node *prev = head;
     for (int i = 0; i < (entry-1); i++)
         if (i == 0)
             current = current->next;
@@ -99,7 +91,7 @@ void deleteNode(Node* head, int entry) {
     }
 }
 
-void insertNode(Node* head, int entry) {
+void insertNode(Node*& head, int entry) {
     Node* current = head;
     Node* prev = head;
 
@@ -117,7 +109,7 @@ void insertNode(Node* head, int entry) {
     prev->next = newnode;
 }
 
-void deleteList(Node* head) {
+void deleteList(Node*& head) {
     Node* current = head;
 
     while (current) {
@@ -128,16 +120,39 @@ void deleteList(Node* head) {
     head = nullptr;
 }
 
-void insertAtHead(Node* head, int val) {
+void insertAtHead(Node*& head, int val) {
+    Node *new_node = new Node;
+
     // adds node at head
     if (!head) { // if this is the first node, it's the new head
-        head = newVal;
-        newVal->next = nullptr;
-        newVal->value = tmp_val;
+        head = new_node;
+        new_node->next = nullptr;
+        new_node->value = val;
+    } else { // its a second or subsequent node; place at the head
+        new_node->next = head;
+        new_node->value = val;
+        head = new_node;
     }
-    else { // its a second or subsequent node; place at the head
-        newVal->next = head;
-        newVal->value = tmp_val;
-        head = newVal;
+}
+
+void insertAtTail(Node*& head, int val) {
+    Node* new_node = new Node;
+    Node* current = head;
+
+    // If its the first node, it becomes the new head
+    if (!head) {
+        head = new_node;
+        new_node->next = nullptr;
+        new_node->value = val;
+    } else {
+        // Traverse to the end of the linked list
+        while (current->next != nullptr) {
+            current = current->next;
+        }
+
+        current->next = new_node;
+        new_node->next = nullptr;
+        new_node->value = val;
     }
+
 }
